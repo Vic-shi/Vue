@@ -78,13 +78,13 @@ export default {
       document.getElementById('form').style.display = 'block'
     },
     edit() {
-      if (this.changeId == '空' || this.changeId.length > 1) {
+      if (this.changeId === '空' || this.changeId.length > 1) {
         this.$alert('请选中一个账套', {
           confirmButtonText: '确定',
           callback: action => {
           }
         })
-      }else{
+      } else {
         var params = { 'id': this.changeId[0].id
         }
         this.$axios.post(this.HOST + '/api/account/load', params)
@@ -102,10 +102,10 @@ export default {
       this.$axios.post(this.HOST + '/api/account/list')
         .then(response => {
           this.list = response.data.result
-          for (var i = 0; i < response.data.result.length;i++) {
-            if (response.data.result[i].status == 0) {
+          for (var i = 0; i < response.data.result.length; i++) {
+            if (response.data.result[i].status === 0) {
               this.list[i].status = '禁用'
-            }else{
+            } else {
               this.list[i].status = '启用'
             }
           }
@@ -115,6 +115,10 @@ export default {
         })
     },
     save() {
+      if (this.form.rmbRate === '' || this.form.rmbRate === undefined) {
+        this.open('积分汇率不能为空')
+        return
+      }
       var params = { 'rmbRate': this.form.rmbRate,
         'id': this.form.id
       }
@@ -137,17 +141,16 @@ export default {
           })
           console.log(err)
         })
-
     },
     deletes() {
-      if (this.changeId == '空' || this.changeId.length > 1) {
+      if (this.changeId === '空' || this.changeId.length > 1) {
         this.$alert('请选中一个账套', {
           confirmButtonText: '确定',
           callback: action => {
           }
         })
         return
-      }else{
+      } else {
         var params = { 'id': this.changeId[0].id }
         this.$axios.post(this.HOST + '/api/account/delete', params)
           .then(response => {
@@ -177,6 +180,13 @@ export default {
     },
     handleSelectionChange(val) {
       this.changeId = val
+    },
+    open(data) {
+      this.$alert(data, {
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
     }
   }
 }

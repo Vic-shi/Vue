@@ -84,7 +84,7 @@
     <el-input v-model="forms.nickName"></el-input>
   </el-form-item> 
   <el-form-item label="手机号">
-    <el-input v-model="forms.mobile"></el-input>
+    <el-input v-model="forms.mobile" type = "number"></el-input>
   </el-form-item> 
   <el-form-item label="邮箱">
     <el-input v-model="forms.email"></el-input>
@@ -202,7 +202,7 @@ export default {
         })
     },
     changePass() {
-      if (this.changeId == '' || this.changeId.length > 1) {
+      if (this.changeId === '' || this.changeId.length > 1) {
         this.$alert('请选中一个用户', {
           confirmButtonText: '确定',
           callback: action => {
@@ -210,7 +210,7 @@ export default {
         })
         return
       }
-      var param = {'personId': this.changeId[0].id }
+      var param = { 'personId': this.changeId[0].id }
       this.$axios.post(this.HOST + '/api/person/resetPassword', param)
         .then(response => {
           this.$alert('重置成功', {
@@ -231,7 +231,7 @@ export default {
     select() {
       var match = document.getElementById('message').value
       var param = {
-        'match':match
+        'match': match
       }
       this.$axios.post(this.HOST + '/api/person/findPage', param)
         .then(response => {
@@ -242,7 +242,7 @@ export default {
         })
     },
     getTree() {
-      if (this.addOrEdit == 'edit') {
+      if (this.addOrEdit === 'edit') {
         this.keys = this.getString(this.forms.orgIds)
       }
 
@@ -264,7 +264,7 @@ export default {
       document.getElementById('forms').style.display = 'block'
     },
     remove() {
-      if (this.changeId == '' || this.changeId.length > 1) {
+      if (this.changeId === '' || this.changeId.length > 1) {
         this.$alert('请选中一个用户', {
           confirmButtonText: '确定',
           callback: action => {
@@ -293,7 +293,7 @@ export default {
         })
     },
     edit() {
-      if (this.changeId == '' || this.changeId.length > 1) {
+      if (this.changeId === '' || this.changeId.length > 1) {
         this.$alert('请选中一个用户', {
           confirmButtonText: '确定',
           callback: action => {
@@ -304,7 +304,7 @@ export default {
       this.addOrEdit = 'edit'
       this.getRole()
       this.forms = []
-      var param = {'id': this.changeId[0].id }
+      var param = { 'id': this.changeId[0].id }
       this.$axios.post(this.HOST + '/api/person/load', param)
         .then(response => {
           this.forms = response.data.result
@@ -323,41 +323,74 @@ export default {
       })
     },
     save() {
-      // if (this.$refs.tree.getCheckedKeys().length == 0) {
-      //   this.$alert('请选择权限', {
-      //     confirmButtonText: '确定',
-      //     callback: action => {
-      //     }
-      //   })
-      //   return
-      // }
+      if (this.forms.userName === '' || this.forms.userName === undefined) {
+        this.open('请填写用户名')
+        return
+      }
+      if (this.forms.name === '' || this.forms.name === undefined) {
+        this.open('请填写姓名')
+        return
+      }
+      if (this.forms.nickName === '' || this.forms.nickName === undefined) {
+        this.open('请填写昵称')
+        return
+      }
+      if (this.forms.mobile === '' || this.forms.mobile === undefined) {
+        this.open('请填写手机号')
+        return
+      } else {
+        if (this.forms.mobile.length !== 11) {
+          this.open('请填写11位的手机号')
+          return
+        }
+      }
+      if (this.forms.email === '' || this.forms.email === undefined) {
+        this.open('请填写邮箱')
+        return
+      }
+      if (this.forms.qq === '' || this.forms.qq === undefined) {
+        this.open('请填写qq')
+        return
+      }
+      if (this.forms.wechat === '' || this.forms.wechat === undefined) {
+        this.open('请填写微信号')
+        return
+      }
+      if (this.forms.orgNames === '' || this.forms.orgNames === undefined) {
+        this.open('请选择组织列表')
+        return
+      }
+      if (this.forms.roleNames === '' || this.forms.roleNames === undefined) {
+        this.open('请选择角色列表')
+        return
+      }
       var orgIds = ''
       var roleIds = ''
       if (this.forms.orgIds.indexOf('(') > -1) {
         this.forms.orgIds = this.getString(this.forms.orgIds)
-        for(var i =0;i<this.forms.orgIds.length;i++) {
+        for (var i = 0; i < this.forms.orgIds.length; i++) {
           orgIds += this.forms.orgIds[i]
-          if (this.forms.orgIds.length - i > 1 ) {
-            if (i == 1) {
+          if (this.forms.orgIds.length - i > 1) {
+            if (i === 1) {
               orgIds += ','
-            }else{
+            } else {
               orgIds += ','
             }
           }
         }
-      }else{
+      } else {
         orgIds = this.forms.orgIds
       }
       var param = {}
-      if(this.roleIds.length == 0) {
+      if (this.roleIds.length === 0) {
         var str = this.forms.roleIds.substring(1, this.forms.roleIds.length - 1)
         roleIds = str.replace(')(', ',')
         // roleIds = this.forms.roleIds
-      }else{
+      } else {
         roleIds = this.roleIds
       }
 
-      if (this.addOrEdit == 'add') {
+      if (this.addOrEdit === 'add') {
         param = {
           'userName': this.forms.userName,
           'nickName': this.forms.nickName,
@@ -369,8 +402,8 @@ export default {
           'orgIds': orgIds,
           'roleIds': roleIds
         }
-      }else if (this.addOrEdit == 'edit') {
-        param = {'id': this.forms.id,
+      } else if (this.addOrEdit === 'edit') {
+        param = { 'id': this.forms.id,
           'userName': this.forms.userName,
           'nickName': this.forms.nickName,
           'name': this.forms.name,
@@ -395,13 +428,21 @@ export default {
           this.getPerson()
         })
         .catch(err => {
+          if (err.response.data.message.indexOf('邮件格式错误') > -1) {
+            this.$alert('邮件格式错误', {
+              confirmButtonText: '确定',
+              callback: action => {
+              }
+            })
+            return
+          }
           this.$alert(err.response.data.message, {
             confirmButtonText: '确定',
             callback: action => {
             }
           })
+          return
         })
-
     },
     back() {
       document.getElementById('forms').style.display = 'none'
@@ -412,20 +453,20 @@ export default {
       var orgNames = ''
       for (var i = 0; i < this.$refs.tree.getCheckedKeys().length; i++) {
         orgIds += this.$refs.tree.getCheckedKeys()[i]
-        if (this.$refs.tree.getCheckedKeys().length - i > 1 ) {
-          if (i == 1) {
+        if (this.$refs.tree.getCheckedKeys().length - i > 1) {
+          if (i === 1) {
             orgIds += ','
-          }else{
+          } else {
             orgIds += ','
           }
         }
       }
       for (var i = 0; i < this.$refs.tree.getCheckedNodes().length; i++) {
         orgNames += this.$refs.tree.getCheckedNodes()[i].name
-        if (this.$refs.tree.getCheckedNodes().length - i > 1 ) {
-          if (i == 1) {
+        if (this.$refs.tree.getCheckedNodes().length - i > 1) {
+          if (i === 1) {
             orgNames += ','
-          }else{
+          } else {
             orgNames += ','
           }
         }
@@ -438,29 +479,29 @@ export default {
     cancelTree() {
       document.getElementById('showTree').style.display = 'none'
     },
-    transData(a, idStr, pidStr, chindrenStr) {    
+    transData(a, idStr, pidStr, chindrenStr) {
       var r = []
       var hash = {}
-      var id = idStr 
-      var pid = pidStr 
-      var children = chindrenStr 
-      var i = 0 
-      var j = 0 
-      var len = a.length   
-      for (; i < len; i++) {    
-        hash[a[i][id]] = a[i]    
-      }    
-      for (; j < len; j++) {    
+      var id = idStr
+      var pid = pidStr
+      var children = chindrenStr
+      var i = 0
+      var j = 0
+      var len = a.length
+      for (; i < len; i++) {
+        hash[a[i][id]] = a[i]
+      }
+      for (; j < len; j++) {
         var aVal = a[j]
-        var hashVP = hash[aVal[pid]]    
-        if (hashVP) {    
-          !hashVP[children] && (hashVP[children] = [])    
-          hashVP[children].push(aVal)    
-        } else {    
-          r.push(aVal)    
-        }    
-      }    
-      return r  
+        var hashVP = hash[aVal[pid]]
+        if (hashVP) {
+          !hashVP[children] && (hashVP[children] = [])
+          hashVP[children].push(aVal)
+        } else {
+          r.push(aVal)
+        }
+      }
+      return r
     },
     handleSelectionChange(val) {
       this.changeId = val
@@ -474,7 +515,14 @@ export default {
       // str.replace(')(', ',')
       // str = str + ","
       return str.split(')(')
-    }  
+    },
+    open(data) {
+      this.$alert(data, {
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
+    }
   }
 }
 </script>

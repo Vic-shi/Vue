@@ -115,7 +115,7 @@ export default {
       })
     },
     getRole(data) {
-      if (data == '空') {
+      if (data === '空') {
         var param = { 'pageOffset': 0, 'pageSize': 10 }
         this.$axios.post(this.HOST + '/api/role/findPage', param).then(response => {
           this.list = response.data.result.content
@@ -123,7 +123,7 @@ export default {
         }).catch(err => {
           console.log(err)
         })
-      }else{ 
+      } else {
         var param = { 'match': data, 'pageOffset': 0, 'pageSize': 10 }
         this.$axios.post(this.HOST + '/api/role/findPage', param).then(response => {
           this.list = response.data.result.content
@@ -142,7 +142,7 @@ export default {
       this.getMore(currentPage - 1)
     },
     getPermission(data) {
-      if (data == '空') {
+      if (data === '空') {
         this.$axios.post(this.HOST + '/api/permission/findAll')
           .then(response => {
             this.data2 = response.data.result
@@ -150,8 +150,8 @@ export default {
           .catch(err => {
             console.log(err)
           })
-      }else {
-        var param = {'id':data}
+      } else {
+        var param = { 'id': data }
         this.$axios.post(this.HOST + '/api/permission/findAll', param)
           .then(response => {
           })
@@ -169,7 +169,7 @@ export default {
       document.getElementById('forms').style.display = 'block'
     },
     remove() {
-      if (this.changeId == '' || this.changeId.length > 1) {
+      if (this.changeId === '' || this.changeId.length > 1) {
         this.$alert('请选中一个角色', {
           confirmButtonText: '确定',
           callback: action => {
@@ -199,7 +199,7 @@ export default {
         })
     },
     edit() {
-      if (this.changeId == '' || this.changeId.length > 1) {
+      if (this.changeId === '' || this.changeId.length > 1) {
         this.$alert('请选中一个角色', {
           confirmButtonText: '确定',
           callback: action => {
@@ -207,7 +207,7 @@ export default {
         })
         return
       }
-      var param = {'id': this.changeId[0].id }
+      var param = { 'id': this.changeId[0].id }
       this.$axios.post(this.HOST + '/api/role/load', param)
         .then(response => {
           this.getPermission('空')
@@ -227,7 +227,7 @@ export default {
       document.getElementById('forms').style.display = 'block'
     },
     save() {
-      if (this.forms.name == undefined || this.forms.name == '') {
+      if (this.forms.name === undefined || this.forms.name === '') {
         this.$alert('名称不能为空', {
           confirmButtonText: '确定',
           callback: action => {
@@ -235,7 +235,7 @@ export default {
         })
         return
       }
-      if (this.$refs.tree.getCheckedKeys().length == 0) {
+      if (this.$refs.tree.getCheckedKeys().length === 0) {
         this.$alert('请选择权限', {
           confirmButtonText: '确定',
           callback: action => {
@@ -247,21 +247,21 @@ export default {
       var permissionIds = ''
       for (var i = 0; i < this.$refs.tree.getCheckedKeys().length; i++) {
         permissionIds += this.$refs.tree.getCheckedKeys()[i]
-        if (this.$refs.tree.getCheckedKeys().length - i > 1 ) {
-          if (i == 1) {
+        if (this.$refs.tree.getCheckedKeys().length - i > 1) {
+          if (i === 1) {
             permissionIds += ','
-          }else{
+          } else {
             permissionIds += ','
           }
         }
       }
-      if (this.addOrEdit == 'add') {
-        param = {'name': this.forms.name,
+      if (this.addOrEdit === 'add') {
+        param = { 'name': this.forms.name,
           'permissionIds': permissionIds,
           'des': this.forms.des
         }
-      }else if (this.addOrEdit == 'edit') {
-        param = {'id': this.forms.id,
+      } else if (this.addOrEdit === 'edit') {
+        param = { 'id': this.forms.id,
           'name': this.forms.name,
           'permissionIds': permissionIds,
           'des': this.forms.des
@@ -299,7 +299,7 @@ export default {
       // str.replace(')(', ',')
       // str = str + ","
       return str.split(')(')
-    }  
+    }
   }
 }
 </script>

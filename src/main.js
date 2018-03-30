@@ -9,23 +9,22 @@ import '@/styles/main.css'
 import $ from 'jquery'
 import axios from 'axios'
 import qs from 'qs'
-// import apiConfig from '../config/api.config'
 axios.defaults.baseURL = ''
-axios.defaults.transformRequest = [function(data) { 
+axios.defaults.transformRequest = [function(data) {
   return qs.stringify(data)
 }]
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-// axios.interceptors.request.use(
-//   config => {
-//     if (store.state.token) {   // 判断是否存在token，如果存在的话，则每个http header都加上token
-//       config.headers.Authorization = `token ${store.state.token}`
-//     }
-//     return config;
-//   },
-//   err => {
-//     return Promise.reject(err)
-//   }
-// )
+axios.interceptors.response.use(
+  config => {
+    return config
+  },
+  err => {
+    if (err.response.status === 401) {
+      router.push({ path: '/login' })
+    }
+    return err
+  }
+)
 Vue.prototype.$axios = axios
 Vue.prototype.HOST = '/api'
 

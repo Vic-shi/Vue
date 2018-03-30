@@ -71,7 +71,7 @@ export default {
       })
     },
     remove() {
-      var params = { 'id' : this.id }
+      var params = { 'id': this.id }
       this.$axios.post(this.HOST + '/api/permission/delete', params)
         .then(response => {
           this.message = '空'
@@ -86,7 +86,7 @@ export default {
     },
     submitForm(data) {
       this.id = data.id
-      var params = { 'id' : data.id }
+      var params = { 'id': data.id }
       this.$axios.post(this.HOST + '/api/permission/load', params)
         .then(response => {
           this.name = response.data.result.typeName
@@ -130,13 +130,17 @@ export default {
       document.getElementById('titleName').innerHTML = '新增组织类型'
     },
     save() {
+      if (this.form.name === '' || this.form.name === undefined) {
+        this.open('名称不能为空')
+        return
+      }
       var params = {}
-      if (this.form.pid == '空') {
-        params = { 'id' : this.id,
+      if (this.form.pid === '空') {
+        params = { 'id': this.id,
           'name': this.form.name
         }
-      }else{
-        params = { 'pid' : this.form.pid,
+      } else {
+        params = { 'pid': this.form.pid,
           'name': this.form.name
         }
       }
@@ -161,33 +165,33 @@ export default {
       this.name = ''
       this.id2 = ''
     },
-    transData(a, idStr, pidStr, chindrenStr) {    
+    transData(a, idStr, pidStr, chindrenStr) {
       var r = []
       var hash = {}
-      var id = idStr 
-      var pid = pidStr 
-      var children = chindrenStr 
-      var i = 0 
-      var j = 0 
-      var len = a.length   
-      for (; i < len; i++) {    
-        hash[a[i][id]] = a[i]    
-      }    
-      for (; j < len; j++) {    
+      var id = idStr
+      var pid = pidStr
+      var children = chindrenStr
+      var i = 0
+      var j = 0
+      var len = a.length
+      for (; i < len; i++) {
+        hash[a[i][id]] = a[i]
+      }
+      for (; j < len; j++) {
         var aVal = a[j]
-        var hashVP = hash[aVal[pid]]    
-        if (hashVP) {    
-          !hashVP[children] && (hashVP[children] = [])    
-          hashVP[children].push(aVal)    
-        } else {    
-          r.push(aVal)    
-        }    
-      }    
-      return r  
+        var hashVP = hash[aVal[pid]]
+        if (hashVP) {
+          !hashVP[children] && (hashVP[children] = [])
+          hashVP[children].push(aVal)
+        } else {
+          r.push(aVal)
+        }
+      }
+      return r
     },
     open2() {
       var message = ''
-      if (this.id == "" ) {
+      if (this.id === '') {
         this.$alert('请选中组织', {
           confirmButtonText: '确定',
           callback: action => {
@@ -201,13 +205,13 @@ export default {
         type: 'warning'
       }).then(() => {
         this.remove()
-        if (this.message != '空') {
+        if (this.message !== '空') {
           message = this.message
           this.$message({
             type: 'info',
             message: message
           })
-        }else{
+        } else {
           message = '删除成功!'
           this.$message({
             type: 'success',
@@ -218,9 +222,16 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        })        
+        })
       })
-    }    
+    },
+    open(data) {
+      this.$alert(data, {
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
+    }
   },
   data() {
     return {

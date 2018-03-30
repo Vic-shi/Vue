@@ -86,7 +86,6 @@ export default {
       .catch(err => {
         console.log(err)
       })
-
   },
   watch: {
     filterText(val) {
@@ -110,7 +109,7 @@ export default {
 
     },
     remove() {
-      var params = { 'id' : this.id }
+      var params = { 'id': this.id }
       this.$axios.post(this.HOST + '/api/org/delete', params)
         .then(response => {
           this.getTree()
@@ -123,7 +122,7 @@ export default {
     },
     submitForm(data) {
       this.id = data.id
-      var params = { 'id' : data.id }
+      var params = { 'id': data.id }
       this.$axios.post(this.HOST + '/api/org/load', params)
         .then(response => {
           this.name = response.data.result.typeName
@@ -137,7 +136,7 @@ export default {
           console.log(err)
         })
       // 组织类型取数
-      var params2 = { 'id' : this.form.pid }
+      var params2 = { 'id': this.form.pid }
       this.$axios.post(this.HOST + '/api/orgType/listChildren', params2).then(response => {
         this.approvers = response.data.result
         console.log(response)
@@ -170,7 +169,7 @@ export default {
       this.form.pid = this.idid
       this.id2 = ''
       // 组织类型取数
-      var params = { 'id' : this.id }
+      var params = { 'id': this.id }
       this.$axios.post(this.HOST + '/api/orgType/listChildren', params).then(response => {
         this.approvers = response.data.result
         console.log(response)
@@ -181,8 +180,20 @@ export default {
       document.getElementById('titleName').innerHTML = '新增字典'
     },
     save() {
-      var params = { 'id' : this.form.id,
-        'sn' : this.form.sn,
+      if (this.form.name === '' || this.form.name === undefined) {
+        this.open('组织名称为空')
+        return
+      }
+      if (this.name === '' || this.name === undefined) {
+        this.open('组织类型为空')
+        return
+      }
+      if (this.id2 === '' || this.id2 === undefined) {
+        this.open('账套为空')
+        return
+      }
+      var params = { 'id': this.form.id,
+        'sn': this.form.sn,
         'name': this.form.name,
         'typeId': this.id,
         'pid': this.form.pid,
@@ -213,32 +224,32 @@ export default {
       this.name = ''
       this.id2 = ''
     },
-    transData(a, idStr, pidStr, chindrenStr) {    
+    transData(a, idStr, pidStr, chindrenStr) {
       var r = []
       var hash = {}
-      var id = idStr 
-      var pid = pidStr 
-      var children = chindrenStr 
-      var i = 0 
-      var j = 0 
-      var len = a.length   
-      for (; i < len; i++) {    
-        hash[a[i][id]] = a[i]    
-      }    
-      for (; j < len; j++) {    
+      var id = idStr
+      var pid = pidStr
+      var children = chindrenStr
+      var i = 0
+      var j = 0
+      var len = a.length
+      for (; i < len; i++) {
+        hash[a[i][id]] = a[i]
+      }
+      for (; j < len; j++) {
         var aVal = a[j]
-        var hashVP = hash[aVal[pid]]    
-        if (hashVP) {    
-          !hashVP[children] && (hashVP[children] = [])    
-          hashVP[children].push(aVal)    
-        } else {    
-          r.push(aVal)    
-        }    
-      }    
-      return r  
+        var hashVP = hash[aVal[pid]]
+        if (hashVP) {
+          !hashVP[children] && (hashVP[children] = [])
+          hashVP[children].push(aVal)
+        } else {
+          r.push(aVal)
+        }
+      }
+      return r
     },
     open2() {
-      if (this.id == "" ) {
+      if (this.id === '') {
         this.$alert('请选中组织', {
           confirmButtonText: '确定',
           callback: action => {
@@ -260,9 +271,16 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        })        
+        })
       })
-    }  
+    },
+    open(data) {
+      this.$alert(data, {
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
+    }
   },
   data() {
     return {

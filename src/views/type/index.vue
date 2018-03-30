@@ -71,7 +71,11 @@ export default {
       })
     },
     remove() {
-      var params = { 'id' : this.id }
+      if (this.id === '' || this.id === undefined) {
+        this.open('未选中节点')
+        return
+      }
+      var params = { 'id': this.id }
       this.$axios.post(this.HOST + '/api/orgType/delete', params)
         .then(response => {
           this.message = '空'
@@ -92,11 +96,12 @@ export default {
           })
           this.message = err.response.data.message
           console.log(err)
+          return
         })
     },
     submitForm(data) {
       this.id = data.id
-      var params = { 'id' : data.id }
+      var params = { 'id': data.id }
       this.$axios.post(this.HOST + '/api/orgType/load', params)
         .then(response => {
           this.name = response.data.result.typeName
@@ -140,13 +145,17 @@ export default {
       document.getElementById('titleName').innerHTML = '新增组织类型'
     },
     save() {
+      if (this.form.name === '' || this.form.name === undefined) {
+        this.open('名称不能为空')
+        return
+      }
       var params = {}
-      if (this.form.pid == '空') {
-        params = { 'id' : this.id,
+      if (this.form.pid === '空') {
+        params = { 'id': this.id,
           'name': this.form.name
         }
-      }else{
-        params = { 'pid' : this.form.pid,
+      } else {
+        params = { 'pid': this.form.pid,
           'name': this.form.name
         }
       }
@@ -175,30 +184,37 @@ export default {
       this.name = ''
       this.id2 = ''
     },
-    transData(a, idStr, pidStr, chindrenStr) {    
+    transData(a, idStr, pidStr, chindrenStr) {
       var r = []
       var hash = {}
-      var id = idStr 
-      var pid = pidStr 
-      var children = chindrenStr 
-      var i = 0 
-      var j = 0 
-      var len = a.length   
-      for (; i < len; i++) {    
-        hash[a[i][id]] = a[i]    
-      }    
-      for (; j < len; j++) {    
+      var id = idStr
+      var pid = pidStr
+      var children = chindrenStr
+      var i = 0
+      var j = 0
+      var len = a.length
+      for (; i < len; i++) {
+        hash[a[i][id]] = a[i]
+      }
+      for (; j < len; j++) {
         var aVal = a[j]
-        var hashVP = hash[aVal[pid]]    
-        if (hashVP) {    
-          !hashVP[children] && (hashVP[children] = [])    
-          hashVP[children].push(aVal)    
-        } else {    
-          r.push(aVal)    
-        }    
-      }    
-      return r  
-    }   
+        var hashVP = hash[aVal[pid]]
+        if (hashVP) {
+          !hashVP[children] && (hashVP[children] = [])
+          hashVP[children].push(aVal)
+        } else {
+          r.push(aVal)
+        }
+      }
+      return r
+    },
+    open(data) {
+      this.$alert(data, {
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
+    }
   },
   data() {
     return {
