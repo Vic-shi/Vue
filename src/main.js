@@ -26,7 +26,7 @@ axios.interceptors.response.use(
   }
 )
 Vue.prototype.$axios = axios
-Vue.prototype.HOST = '/api'
+Vue.prototype.HOST = ''
 
 import '@/styles/index.scss' // global css
 

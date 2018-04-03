@@ -61,11 +61,11 @@ export default {
     },
     getTree() {
       this.$axios.post(this.HOST + '/api/orgType/findAll').then(response => {
-        console.log(response.data.result)
+        // console.log(response.data.result)
         this.data2 = []
         // this.data2 = JSON.stringify(response.data.result).replace(/\"/g, "\\'")
         this.data2 = response.data.result
-        console.log(this.data2)
+        // console.log(this.data2)
       }).catch(err => {
         console.log(err)
       })
@@ -110,7 +110,7 @@ export default {
           this.form.pid = '空'
           this.idid = this.form.id
           this.pname = this.form.name
-          console.log(response)
+          // console.log(response)
         })
         .catch(err => {
           console.log(err)
@@ -121,11 +121,11 @@ export default {
     },
     handleChange(value) {
       this.id = value
-      console.log(value)
+      // console.log(value)
     },
     handleChange2(value) {
       this.id2 = value
-      console.log(value)
+      // console.log(value)
     },
     add() {
       // if (this.id == "") {
